@@ -1,1 +1,1 @@
-from connect4.game import Game, Player, State, MoveResult
+from connect4.game import Game, Player, Victory, State, MoveResult

@@ -22,18 +22,22 @@ class Game:
             if self._grid[row][i] is not None:
                 continue
 
-            self._grid[row][i] = self.current.id
+            player = self.current
+            self._grid[row][i] = player.id
 
-            if self.current.id == len(self._players) - 1:
+            if player.id == len(self._players) - 1:
                 self.current = self._players[0]
             else:
-                self.current = self._players[self.current.id + 1]
+                self.current = self._players[player.id + 1]
 
-            result = self.check_win(row, i)
+            (result, positions) = self.check_win(row, i)
             if result != MoveResult.NONE:
                 self.state = State.FINISHED
 
-            return i, result
+                if result == MoveResult.VICTORY:
+                    return i, result, Victory(player, positions)
+
+            return i, result, None
 
     def check_draw(self):
         for i in self._grid[self.board_width - 1]:
@@ -47,63 +51,63 @@ class Game:
         if player is None:
             return None
 
-        connect = 0
+        positions = []
 
         horizontal_left = max(row - self._connect + 1, 0)
         horizontal_right = min(row + self._connect, self.board_width) - 1
 
         for i in range(horizontal_left, horizontal_right + 1):
             if self._grid[i][column] == player:
-                connect = connect + 1
+                positions.append((i, column))
 
-                if connect == self._connect:
-                    return MoveResult.VICTORY
+                if len(positions) == self._connect:
+                    return MoveResult.VICTORY, positions
             else:
-                connect = 0
+                positions.clear()
 
-        connect = 0
+        positions.clear()
 
         vertical_up = max(column - self._connect + 1, 0)
         vertical_down = min(column + self._connect, self.board_height) - 1
 
         for i in range(vertical_up, vertical_down + 1):
             if self._grid[row][i] == player:
-                connect = connect + 1
+                positions.append((row, i))
 
-                if connect == self._connect:
-                    return MoveResult.VICTORY
+                if len(positions) == self._connect:
+                    return MoveResult.VICTORY, positions
             else:
-                connect = 0
+                positions.clear()
 
-        connect = 0
+        positions.clear()
 
         diagonal_up_left = min(row - horizontal_left, vertical_down - column)
         diagonal_down_right = min(horizontal_right - row, column - vertical_up)
 
         for i in range(0, diagonal_up_left + diagonal_down_right + 1):
             if self._grid[row - diagonal_up_left + i][column + diagonal_up_left - i] == player:
-                connect = connect + 1
+                positions.append((row - diagonal_up_left + i, column + diagonal_up_left - i))
 
-                if connect == self._connect:
-                    return MoveResult.VICTORY
+                if len(positions) == self._connect:
+                    return MoveResult.VICTORY, positions
             else:
-                connect = 0
+                positions.clear()
 
-        connect = 0
+        positions.clear()
 
         diagonal_up_right = min(horizontal_right - row, vertical_down - column)
         diagonal_down_left = min(row - horizontal_left, column - vertical_up)
 
         for i in range(0, diagonal_up_right + diagonal_down_left + 1):
             if self._grid[row + diagonal_up_right - i][column + diagonal_up_right - i] == player:
-                connect = connect + 1
+                positions.append((row + diagonal_up_right - i, column + diagonal_up_right - i))
 
-                if connect == self._connect:
-                    return MoveResult.VICTORY
+                if len(positions) == self._connect:
+                    return MoveResult.VICTORY, positions
             else:
-                connect = 0
+                positions.clear()
 
-        return MoveResult.NONE
+        return MoveResult.NONE, None
 
 
 class Player:
@@ -111,6 +115,13 @@ class Player:
     def __init__(self, id: int, color):
         self.id = id
         self.color = color
+
+
+class Victory:
+
+    def __init__(self, player: Player, position: []):
+        self.player = player
+        self.position = position
 
 
 class State(Enum):

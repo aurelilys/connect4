@@ -2,7 +2,7 @@ from math import floor
 from random import randint
 from tkinter import Canvas, Tk
 
-from connect4 import Game, MoveResult, State
+from connect4 import Game, MoveResult, State, Victory
 from connect4.display.particle import Particle, Side
 
 
@@ -72,7 +72,8 @@ class Display:
             return
 
         color = self.game.current.color
-        (y, result) = self.game.put(x)
+        (y, result, victory) = self.game.put(x)
+
         event.widget.create_oval(100 + ((x + 0.2) * (400 / self.game.board_width)),
                                  400 - ((y + 0.2) * (340 / self.game.board_height)),
                                  100 + ((x + 0.8) * (400 / self.game.board_width)),
@@ -83,7 +84,7 @@ class Display:
             self.canvas.delete(self.cursor)
 
         if result == MoveResult.VICTORY:
-            self.win()
+            self.win(victory)
             return
 
         minimum = 100 + ((x + 0.2) * (400 / self.game.board_width))
@@ -92,15 +93,24 @@ class Display:
                                                maximum, 40,
                                                fill=self.game.current.color)
 
-    def win(self):
+    def win(self, victory: Victory):
         self.cursor = None
 
         x = 0
         y = 0
 
-        for i in range(500):
+        for i in range(len(victory.position) * 100):
             if self.game.state == State.DESTROYED:
                 return
+
+            if i % 100 == 0:
+                oval_x, oval_y = victory.position[floor(i / 100)]
+
+                self.canvas.create_oval(100 + ((oval_x + 0.2) * (400 / self.game.board_width)),
+                                        400 - ((oval_y + 0.2) * (340 / self.game.board_height)),
+                                        100 + ((oval_x + 0.8) * (400 / self.game.board_width)),
+                                        400 - ((oval_y + 0.8) * (340 / self.game.board_height)),
+                                        fill=victory.player.color, width=5, outline="#ecf0f1")
 
             x = randint(-x - 3, -x + 3) + x
             y = randint(-y - 3, -y + 3) + y
