@@ -6,42 +6,38 @@ from tkinter import Canvas
 class Particle:
 
     def __init__(self, direction, canvas: Canvas, color):
-        self.limit = randint(20, 300)
-        self.direction = direction
-        self.fall = False
+        self._limit = randint(20, 300)
+        self._direction = direction
+        self._fall = False
 
-        self.x = 600 if direction == Side.RIGHT else 0
-        self.y = 450
+        self._x = 600 if direction == Side.RIGHT else 0
+        self._y = 450
 
         self.value = canvas.create_oval(0, 0, 0, 0, fill=color, width=0)
 
     def update(self, canvas: Canvas):
-        if not self.fall and self.y < self.limit:
-            self.fall = True
-            self.direction = Side.random()
+        if not self._fall and self._y < self._limit:
+            self._fall = True
+            self._direction = Side.random()
 
             return True
 
-        if self.fall:
-            if self.direction == Side.LEFT:
-                self.x += randint(-1, 0)
+        if self._fall:
+            if self._direction == Side.LEFT:
+                self._x += randint(-1, 0) * 0.2
             else:
-                self.x += randint(0, 1)
-            self.y += 1
-
-            canvas.coords(self.value, self.x, self.y, self.x + 6, self.y + 6)
-
-            if self.y > 450 or self.y < 0 or self.x < 0 or self.x > 600:
-                return False
-            return True
-
-        if self.direction == Side.LEFT:
-            self.x += randint(1, 10)
+                self._x += randint(0, 1) * 0.2
+            self._y += 1
         else:
-            self.x += randint(-10, -1)
-        self.y += randint(-10, -1)
+            if self._direction == Side.LEFT:
+                self._x += randint(1, 10)
+            else:
+                self._x += randint(-10, -1)
+            self._y += randint(-10, -1)
 
-        canvas.coords(self.value, self.x, self.y, self.x + 6, self.y + 6)
+        canvas.coords(self.value, self._x, self._y, self._x + 6, self._y + 6)
+        if self._y > 450 or self._y < 0 or self._x < 0 or self._x > 600:
+            return False
         return True
 
 
