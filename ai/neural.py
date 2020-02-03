@@ -1,11 +1,9 @@
-from ann_visualizer.visualize import ann_viz
 from tensorflow import keras
 from tensorflow_core.python.keras import Model
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(7))
 
-ann_viz(model, title="My first neural network")
 Agent(model)
 
 

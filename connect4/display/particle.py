@@ -24,10 +24,10 @@ class Particle:
 
         if self.fall:
             if self.direction == Side.LEFT:
-                self.x = randint(-1, 0) + self.x
+                self.x += randint(-1, 0)
             else:
-                self.x = randint(0, 1) + self.x
-            self.y = 1 + self.y
+                self.x += randint(0, 1)
+            self.y += 1
 
             canvas.coords(self.value, self.x, self.y, self.x + 6, self.y + 6)
 
@@ -36,10 +36,10 @@ class Particle:
             return True
 
         if self.direction == Side.LEFT:
-            self.x = randint(1, 10) + self.x
+            self.x += randint(1, 10)
         else:
-            self.x = randint(-10, -1) + self.x
-        self.y = randint(-10, -1) + self.y
+            self.x += randint(-10, -1)
+        self.y += randint(-10, -1)
 
         canvas.coords(self.value, self.x, self.y, self.x + 6, self.y + 6)
         return True

@@ -59,8 +59,7 @@ class Display:
         maximum = 100 + ((x + 0.8) * (400 / self.game.board_width))
 
         self.cursor = event.widget.create_oval(minimum, 40 - (maximum - minimum),
-                                               maximum, 40,
-                                               fill=self.game.current.color)
+                                               maximum, 40, fill=self.game.current.color)
 
     def click(self, event):
         if self.game.state != State.PLAYING:
@@ -91,5 +90,4 @@ class Display:
         minimum = 100 + ((x + 0.2) * (400 / self.game.board_width))
         maximum = 100 + ((x + 0.8) * (400 / self.game.board_width))
         self.cursor = event.widget.create_oval(minimum, 40 - (maximum - minimum),
-                                               maximum, 40,
-                                               fill=self.game.current.color)
+                                               maximum, 40, fill=self.game.current.color)
