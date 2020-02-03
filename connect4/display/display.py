@@ -87,4 +87,5 @@ class Display:
             self._window.after(0, WinEffect(self._game, self._canvas, victory).run)
             return
 
-        self._draw_cursor(x)
+        if result == MoveResult.NONE:
+            self._draw_cursor(x)

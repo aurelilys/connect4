@@ -31,19 +31,25 @@ class Game:
                 self.current = self._players[player.id + 1]
 
             (result, positions) = self.check_win(row, i)
+
             if result != MoveResult.NONE:
                 self.state = State.FINISHED
 
                 if result == MoveResult.VICTORY:
                     return i, result, Victory(player, positions)
+            else:
+                if self.check_draw():
+                    self.state = State.FINISHED
+
+                    return i, MoveResult.DRAW, None
 
             return i, result, None
 
     def check_draw(self):
-        for i in self._grid[self.board_width - 1]:
-            if i is not None:
-                return True
-        return False
+        for i in range(self.board_width):
+            if self._grid[i][self.board_height - 1] is None:
+                return False
+        return True
 
     def check_win(self, row, column):
         player = self._grid[row][column]
