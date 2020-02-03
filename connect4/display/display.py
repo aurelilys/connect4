@@ -17,7 +17,7 @@ class Display:
         self._window.resizable(width=False, height=False)
         self._window.geometry("600x450+{}+{}".format(int((self._window.winfo_screenwidth() / 2) - (600 / 2)),
                                                      int((self._window.winfo_screenheight() / 2) - (450 / 2))))
-        self._window.iconphoto(False, PhotoImage(file="../assets/logo.png"))
+        self._window.iconphoto(False, PhotoImage(file="assets/logo.png"))
 
         self._canvas = Canvas(self._window, width=600, height=450, background='#ecf0f1')
         self._canvas.place(x=0, y=0)
