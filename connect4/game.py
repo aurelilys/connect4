@@ -119,9 +119,9 @@ class Player:
 
 class Victory:
 
-    def __init__(self, player: Player, position: []):
+    def __init__(self, player: Player, positions: []):
         self.player = player
-        self.position = position
+        self.positions = positions
 
 
 class State(Enum):

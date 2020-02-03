@@ -1,7 +1,6 @@
 from ann_visualizer.visualize import ann_viz
 from tensorflow import keras
-
-from ia import Agent
+from tensorflow_core.python.keras import Model
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(7))

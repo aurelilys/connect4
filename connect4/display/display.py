@@ -1,9 +1,8 @@
 from math import floor
-from random import randint
 from tkinter import Canvas, Tk, PhotoImage
 
-from connect4 import Game, MoveResult, State, Victory
-from connect4.display.particle import Particle, Side
+from connect4 import Game, MoveResult, State
+from connect4.display.win import WinEffect
 
 
 class Display:
@@ -86,7 +85,7 @@ class Display:
             self.canvas.delete(self.cursor)
 
         if result == MoveResult.VICTORY:
-            self.win(victory)
+            self.window.after(0, WinEffect(self.game, self.canvas, victory).run)
             return
 
         minimum = 100 + ((x + 0.2) * (400 / self.game.board_width))
@@ -94,48 +93,3 @@ class Display:
         self.cursor = event.widget.create_oval(minimum, 40 - (maximum - minimum),
                                                maximum, 40,
                                                fill=self.game.current.color)
-
-    def win(self, victory: Victory):
-        self.cursor = None
-
-        x = 0
-        y = 0
-
-        for i in range(len(victory.position) * 100):
-            if self.game.state == State.DESTROYED:
-                return
-
-            if i % 100 == 0:
-                oval_x, oval_y = victory.position[floor(i / 100)]
-
-                self.canvas.create_oval(100 + ((oval_x + 0.2) * (400 / self.game.board_width)),
-                                        400 - ((oval_y + 0.2) * (340 / self.game.board_height)),
-                                        100 + ((oval_x + 0.8) * (400 / self.game.board_width)),
-                                        400 - ((oval_y + 0.8) * (340 / self.game.board_height)),
-                                        fill=victory.player.color, width=5, outline="#ecf0f1")
-
-            x = randint(-x - 3, -x + 3) + x
-            y = randint(-y - 3, -y + 3) + y
-
-            self.canvas.place(x=x, y=y)
-            self.window.update()
-
-        self.canvas.place(x=0, y=0)
-
-        particles = []
-        color = ['#e74c3c', '#e67e22', '#8e44ad', '#1abc9c', '#2ecc71', '#f1c40f', '#f39c12']
-
-        for i in range(1000):
-            if self.game.state == State.DESTROYED:
-                return
-
-            if i % 2 == 0:
-                particles.insert(i, Particle(Side.RIGHT, self.canvas, color[randint(0, 6)]))
-                particles.insert(i, Particle(Side.LEFT, self.canvas, color[randint(0, 6)]))
-
-            for particle in particles:
-                if not particle.update(self.canvas):
-                    self.canvas.delete(particle.value)
-                    particles.remove(particle)
-
-            self.window.update()
