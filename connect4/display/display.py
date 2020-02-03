@@ -2,7 +2,7 @@ from math import floor
 from random import randint
 from tkinter import Canvas, Tk
 
-from connect4 import Game, MoveResult
+from connect4 import Game, MoveResult, State
 from connect4.display.particle import Particle, Side
 
 
@@ -36,12 +36,20 @@ class Display:
 
         self.canvas.bind("<Motion>", self.move)
         self.canvas.bind("<ButtonPress-1>", self.click)
+        self.window.protocol("WM_DELETE_WINDOW", lambda: self._destroy())
 
-        window.mainloop()
+        self.window.mainloop()
+
+    def _destroy(self):
+        self.game.state = State.DESTROYED
+        self.window.destroy()
 
     def move(self, event):
+        if self.game.state != State.PLAYING:
+            return
         if event.x <= 100 or event.x >= 500:
             return
+
         if self.cursor is not None:
             event.widget.delete(self.cursor)
 
@@ -54,6 +62,8 @@ class Display:
                                                fill=self.game.current.color)
 
     def click(self, event):
+        if self.game.state != State.PLAYING:
+            return
         if event.x < 100 or event.x > 500:
             return
 
@@ -89,18 +99,22 @@ class Display:
         y = 0
 
         for i in range(500):
+            if self.game.state == State.DESTROYED:
+                return
+
             x = randint(-x - 3, -x + 3) + x
             y = randint(-y - 3, -y + 3) + y
 
             self.canvas.place(x=x, y=y)
             self.window.update()
+
         self.canvas.place(x=0, y=0)
 
         particles = []
         color = ['#e74c3c', '#e67e22', '#8e44ad', '#1abc9c', '#2ecc71', '#f1c40f', '#f39c12']
 
         for i in range(1000):
-            if 'normal' != self.window.state():
+            if self.game.state == State.DESTROYED:
                 return
 
             if i % 2 == 0:

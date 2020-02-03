@@ -4,7 +4,8 @@ from enum import Enum
 class Game:
 
     def __init__(self, players, board_width, board_height, connect):
-        self.players = players
+        self.state = State.PLAYING
+        self._players = players
         self.board_width = board_width
         self.board_height = board_height
         self._connect = connect
@@ -23,12 +24,14 @@ class Game:
 
             self._grid[row][i] = self.current.id
 
-            if self.current.id == len(self.players) - 1:
-                self.current = self.players[0]
+            if self.current.id == len(self._players) - 1:
+                self.current = self._players[0]
             else:
-                self.current = self.players[self.current.id + 1]
+                self.current = self._players[self.current.id + 1]
 
             result = self.check_win(row, i)
+            if result != MoveResult.NONE:
+                self.state = State.FINISHED
 
             return i, result
 
@@ -112,7 +115,8 @@ class Player:
 
 class State(Enum):
     PLAYING = 0,
-    FINISHED = 1
+    FINISHED = 1,
+    DESTROYED = 2
 
 
 class MoveResult(Enum):
