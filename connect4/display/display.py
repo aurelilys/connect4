@@ -1,6 +1,6 @@
 from math import floor
 from random import randint
-from tkinter import Canvas, Tk
+from tkinter import Canvas, Tk, PhotoImage
 
 from connect4 import Game, MoveResult, State, Victory
 from connect4.display.particle import Particle, Side
@@ -15,9 +15,11 @@ class Display:
         window = Tk()
 
         window.title("Connect4")
+
         window.resizable(width=False, height=False)
         window.geometry("600x450+{}+{}".format(int((window.winfo_screenwidth() / 2) - (600 / 2)),
                                                int((window.winfo_screenheight() / 2) - (450 / 2))))
+        window.iconphoto(False, PhotoImage(file="../assets/logo.png"))
 
         self.window = window
         self.canvas = Canvas(self.window, width=600, height=450, background='#ecf0f1')
