@@ -1,10 +1,12 @@
 from enum import Enum
 
+from connect4.player import Player
+
 
 class Game:
 
     def __init__(self, players, board_width, board_height, connect):
-        self.state = State.PLAYING
+        self.state = State.PREPARING
         self._players = players
         self.board_width = board_width
         self.board_height = board_height
@@ -116,13 +118,6 @@ class Game:
         return MoveResult.NONE, None
 
 
-class Player:
-
-    def __init__(self, id: int, color):
-        self.id = id
-        self.color = color
-
-
 class Victory:
 
     def __init__(self, player: Player, positions: []):
@@ -131,9 +126,10 @@ class Victory:
 
 
 class State(Enum):
-    PLAYING = 0,
-    FINISHED = 1,
-    DESTROYED = 2
+    PREPARING = 0,
+    PLAYING = 1,
+    FINISHED = 2,
+    DESTROYED = 3
 
 
 class MoveResult(Enum):

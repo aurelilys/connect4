@@ -1,8 +1,8 @@
 from math import floor
 from tkinter import Canvas, Tk, PhotoImage
 
-from connect4 import Game, MoveResult, State
 from connect4.display.win import WinEffect
+from connect4.game import Game, State, MoveResult
 
 
 class Display:
@@ -29,10 +29,11 @@ class Display:
             for y in range(self._game.board_height):
                 self._draw_token(x, y, '#ecf0f1')
 
-        self._canvas.bind("<Motion>", self.move)
-        self._canvas.bind("<ButtonPress-1>", self.click)
+        self._canvas.bind("<Motion>", self._move)
+        self._canvas.bind("<ButtonPress-1>", self._click)
         self._window.protocol("WM_DELETE_WINDOW", lambda: self._destroy())
 
+        self._game.state = State.PLAYING
         self._window.mainloop()
 
     def _draw_token(self, x, y, color):
@@ -53,7 +54,7 @@ class Display:
         self._game.state = State.DESTROYED
         self._window.destroy()
 
-    def move(self, event):
+    def _move(self, event):
         if self._game.state != State.PLAYING:
             return
         if event.x <= 100 or event.x >= 500:
@@ -65,7 +66,7 @@ class Display:
         x = floor((event.x - 100) / (400 / self._game.board_width))
         self._draw_cursor(x)
 
-    def click(self, event):
+    def _click(self, event):
         if self._game.state != State.PLAYING:
             return
         if event.x < 100 or event.x > 500:
@@ -89,3 +90,5 @@ class Display:
 
         if result == MoveResult.NONE:
             self._draw_cursor(x)
+
+        self._game.current.next_move(self._game)

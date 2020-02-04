@@ -2,7 +2,7 @@ from math import floor
 from random import randint
 from tkinter import Canvas
 
-from connect4 import Victory, State, Game
+from connect4.game import Victory, State, Game
 from connect4.display.particle import Particle, Side
 
 
