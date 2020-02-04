@@ -1,8 +1,8 @@
 from math import floor
 from tkinter import Canvas, Tk, PhotoImage
 
+from connect4 import Game, State, MoveResult
 from connect4.display.win import WinEffect
-from connect4.game import Game, State, MoveResult
 
 
 class Display:
