@@ -10,7 +10,7 @@ from connect4.player.ai import Agent, create_model
 def main(argv):
     model = create_model()
 
-    training(model, 10000)
+    training(model, 30000)
 
 
 def training(model, iteration=1000):
