@@ -21,7 +21,7 @@ class TrainingDisplay(Display):
 
     def _run(self):
         if self._game.state == State.PLAYING:
-            (result, victory) = self._game.current.next_move(self._game, self)
+            (result, victory) = self._game.current.next_move(self._game, self, True)
 
             if result == MoveResult.VICTORY:
                 for player in self._game._players:
@@ -48,7 +48,7 @@ class TrainingDisplay(Display):
                     else:
                         target = [0, 0, 0, 0, 0, 0, 0]
 
-                    target[action.played] = 0.8
+                    target[action.played] = 0.75
                     self._targets.append(target)
 
                 if lose.prediction is not None:
@@ -59,7 +59,7 @@ class TrainingDisplay(Display):
                 if lose.played == win.played:
                     lose_target[lose.played] = 0
                 else:
-                    lose_target[win.played] = 1
+                    lose_target[win.played] = 0.95
 
                 self._targets.append(lose_target)
         elif self._game.state == State.FINISHED:
@@ -68,7 +68,7 @@ class TrainingDisplay(Display):
             self._reset(Game(self._game._players, 7, 6, 4))
             self._counter += 1
 
-            if self._counter % 100 == 0:
+            if self._counter % 2 == 0:
                 self._model.fit(array(self._features), array(self._targets), batch_size=1000, epochs=5)
 
                 self._model.save("weights.h5")

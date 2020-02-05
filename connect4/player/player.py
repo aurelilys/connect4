@@ -1,5 +1,4 @@
 from connect4 import Game
-from connect4.display import Display
 from connect4.player.ai import Agent
 
 
@@ -31,8 +30,8 @@ class UltimatePlayer(Player):
 
         self._agent = agent
 
-    def next_move(self, game, display=None):
-        (x, board, prediction) = self._agent.predict(game, False if display is Display else True)
+    def next_move(self, game, display=None, training=False):
+        (x, board, prediction) = self._agent.predict(game, training)
         (y, result, victory) = game.put(x)
 
         self.actions.append(Action(board, x, result, prediction))

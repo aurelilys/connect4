@@ -25,11 +25,6 @@ class Game:
             player = self.current
             self._grid[row][i] = player.id
 
-            if player.id == len(self._players) - 1:
-                self.current = self._players[0]
-            else:
-                self.current = self._players[player.id + 1]
-
             (result, positions) = self.check_win(row, i)
 
             if result != MoveResult.NONE:
@@ -42,6 +37,11 @@ class Game:
                     self.state = State.FINISHED
 
                     return i, MoveResult.DRAW, None
+
+            if player.id == len(self._players) - 1:
+                self.current = self._players[0]
+            else:
+                self.current = self._players[player.id + 1]
 
             return i, result, None
 

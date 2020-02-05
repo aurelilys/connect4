@@ -2,15 +2,16 @@ import sys
 
 from numpy.ma import array
 
+from connect4.display import TrainingDisplay, Display
 from connect4.game import Game, State, MoveResult
-from connect4.player import UltimatePlayer
+from connect4.player import UltimatePlayer, HumanPlayer
 from connect4.player.ai import Agent, create_model
 
 
 def main(argv):
     model = create_model()
 
-    training(model, 30000)
+    Display(Game([HumanPlayer(0, '#f6b93b'), UltimatePlayer(1, '#e74c3c', Agent(1, model))], 7, 6, 4))
 
 
 def training(model, iteration=1000):
@@ -24,7 +25,7 @@ def training(model, iteration=1000):
         game.state = State.PLAYING
 
         while game.state == State.PLAYING:
-            game.current.next_move(game)
+            game.current.next_move(game, training=True)
 
         for player in game._players:
             if player.last_action().result == MoveResult.VICTORY:
@@ -50,7 +51,7 @@ def training(model, iteration=1000):
             else:
                 target = [0, 0, 0, 0, 0, 0, 0]
 
-            target[action.played] = 0.8
+            target[action.played] = 0.75
             targets.append(target)
 
         if lose.prediction is not None:
@@ -61,7 +62,7 @@ def training(model, iteration=1000):
         if lose.played == win.played:
             lose_target[lose.played] = 0
         else:
-            lose_target[win.played] = 1
+            lose_target[win.played] = 0.95
 
         targets.append(lose_target)
 

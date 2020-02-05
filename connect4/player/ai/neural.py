@@ -31,7 +31,7 @@ class Agent:
             board.append(internal)
 
         if training:
-            if random.random() > -1.0:
+            if random.random() > 0.95:
                 valid_moves = []
 
                 for i in range(game.board_width):
