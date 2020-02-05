@@ -25,6 +25,8 @@ class Display:
                                     410, 100, 410, 100, 420, 115, 420, 115, 430, 75, 430, 75, 420, 90, 420, width=3,
                                     fill='#1e3799', outline="black")
 
+        self._tokens = []
+
         for x in range(self._game.board_width):
             for y in range(self._game.board_height):
                 self._draw_token(x, y, '#ecf0f1')
@@ -33,15 +35,29 @@ class Display:
         self._canvas.bind("<ButtonPress-1>", self._click)
         self._window.protocol("WM_DELETE_WINDOW", lambda: self._destroy())
 
+        self._on_ready()
         self._game.state = State.PLAYING
         self._window.mainloop()
 
+    def _on_ready(self):
+        pass
+
+    def _reset(self, game):
+        for token in self._tokens:
+            self._canvas.delete(token)
+
+        self._game = game
+        self._game.state = State.PLAYING
+
     def _draw_token(self, x, y, color):
-        self._canvas.create_oval(100 + ((x + 0.2) * (400 / self._game.board_width)),
-                                 60 + ((y + 0.2) * (340 / self._game.board_height)),
-                                 100 + ((x + 0.8) * (400 / self._game.board_width)),
-                                 60 + ((y + 0.8) * (340 / self._game.board_height)), fill=color, width=3,
-                                 outline="black")
+        value = self._canvas.create_oval(100 + ((x + 0.2) * (400 / self._game.board_width)),
+                                         60 + ((y + 0.2) * (340 / self._game.board_height)),
+                                         100 + ((x + 0.8) * (400 / self._game.board_width)),
+                                         60 + ((y + 0.8) * (340 / self._game.board_height)), fill=color,
+                                         width=3, outline="black")
+
+        if color != '#ecf0f1':
+            self._tokens.append(value)
 
     def _draw_cursor(self, x):
         minimum = 100 + ((x + 0.2) * (400 / self._game.board_width))
@@ -91,4 +107,4 @@ class Display:
         if result == MoveResult.NONE:
             self._draw_cursor(x)
 
-        self._game.current.next_move(self._game)
+        self._game.current.next_move(self._game, self)

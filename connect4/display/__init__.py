@@ -1,1 +1,2 @@
-from connect4.display.display import Display
+from .display import Display
+from .training import TrainingDisplay
