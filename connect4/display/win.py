@@ -18,6 +18,8 @@ class WinEffect:
         self._x = 0
         self._y = 0
 
+        self._text = 0
+
         self._counter = 0
         self._shake = len(self._victory.positions) * 100
 
@@ -27,7 +29,9 @@ class WinEffect:
 
         if self._counter <= self._shake:
             if self._counter == self._shake:
-                self._canvas.after(10, self.run)
+                self._canvas.place(x=0, y=0)
+                self._text = self._canvas.create_text(300, 25, fill='#2c3e50', font=("The Bold Font", 20),
+                                                      text=self._victory.player.name + " win ! 👏")
             else:
                 if self._counter % 100 == 0:
                     oval_x, oval_y = self._victory.positions[floor(self._counter / 100)]
