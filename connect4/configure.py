@@ -22,7 +22,7 @@ class Configure:
         self._players = [PlayerSelector(0, "Player 1", '#f6b93b', self._window),
                          PlayerSelector(1, "Player 2", '#e74c3c', self._window)]
 
-        self._window.title("Connect4")
+        self._window.title("Connect4 Deluxe")
         self._window.resizable(width=False, height=False)
         self._window.geometry("300x350+{}+{}".format(int((self._window.winfo_screenwidth() / 2) - (300 / 2)),
                                                      int((self._window.winfo_screenheight() / 2) - (350 / 2))))
@@ -31,8 +31,11 @@ class Configure:
 
         self._canvas = Canvas(self._window, width=300, height=450, background='#ecf0f1')
 
-        Label(self._window, text="Connect 4", foreground='#2c3e50', font=("The Bold Font", 15)).place(x=150, y=30,
-                                                                                                      anchor="center")
+        Label(self._window, text="Connect4", foreground='#2c3e50', font=("The Bold Font", 15)).place(x=160, y=30,
+                                                                                                     anchor="e")
+        Label(self._window, text="Deluxe", foreground='#6c5ce7', font=("The Bold Font", 15)).place(x=160, y=30,
+                                                                                                   anchor="w")
+
         self._connect = Scale(self._window, from_=4, to=10, label="Connect", font=("The Bold Font", 7), length=200,
                               orient=HORIZONTAL)
         self._width = Scale(self._window, from_=7, to=15, label="Width", font=("The Bold Font", 7), length=200,
@@ -54,7 +57,7 @@ class Configure:
     def create_button(self, player):
         Entry(self._window, textvariable=player.entry, font=("The Bold Font", 10), width=10).place(x=50,
                                                                                                    y=250 + player.id * (
-                                                                                                               20 + 10))
+                                                                                                           20 + 10))
         player.button = Button(self._window, width=5, background=player.color, borderwidth=0,
                                command=lambda: self.on_change_color(player))
         player.button.place(x=180, y=250 + (player.id * (20 + 10)))

@@ -1,4 +1,4 @@
-# Connect 4
+# Connect 4 Deluxe
 
 An extensible python connect 4, made for school...
 

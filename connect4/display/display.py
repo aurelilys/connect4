@@ -13,7 +13,7 @@ class Display:
 
         self._window = Tk()
 
-        self._window.title("Connect4")
+        self._window.title("Connect4 Deluxe")
         self._window.resizable(width=False, height=False)
         self._window.geometry("600x450+{}+{}".format(int((self._window.winfo_screenwidth() / 2) - (600 / 2)),
                                                      int((self._window.winfo_screenheight() / 2) - (450 / 2))))
@@ -102,3 +102,6 @@ class Display:
 
         if result == MoveResult.NONE:
             self._draw_cursor(x)
+            return
+
+        self._canvas.create_text(300, 25, fill='#2c3e50', font=("The Bold Font", 20), text="Draw ! 🔐")
