@@ -35,12 +35,8 @@ class Display:
         self._canvas.bind("<ButtonPress-1>", self._click)
         self._window.protocol("WM_DELETE_WINDOW", lambda: self._destroy())
 
-        self._on_ready()
         self._game.state = State.PLAYING
         self._window.mainloop()
-
-    def _on_ready(self):
-        pass
 
     def _reset(self, game):
         for token in self._tokens:
@@ -106,5 +102,3 @@ class Display:
 
         if result == MoveResult.NONE:
             self._draw_cursor(x)
-
-        self._game.current.next_move(self._game, self)
