@@ -4,14 +4,17 @@ from enum import Enum
 class Game:
 
     def __init__(self, players, board_width, board_height, connect):
+        # Initialize Game
         self.state = State.PREPARING
         self._players = players
         self.board_width = board_width
         self.board_height = board_height
         self._connect = connect
 
+        # Generate grid
         self._grid = [[None for i in range(0, board_height)] for j in range(0, board_width)]
 
+        # Set current player
         self.current = players[0]
 
     def can_put(self, row):
@@ -23,21 +26,25 @@ class Game:
                 continue
 
             player = self.current
+            # Add token in grid
             self._grid[row][i] = player.id
 
-            (result, positions) = self.check_win(row, i)
+            (result, positions) = self._check_win(row, i)
 
             if result != MoveResult.NONE:
+                # Stop game
                 self.state = State.FINISHED
 
                 if result == MoveResult.VICTORY:
                     return i, result, Victory(player, positions)
             else:
-                if self.check_draw():
+                if self._check_draw():
+                    # Stop game
                     self.state = State.FINISHED
 
                     return i, MoveResult.DRAW, None
 
+            # Switch current player
             if player.id == len(self._players) - 1:
                 self.current = self._players[0]
             else:
@@ -45,13 +52,14 @@ class Game:
 
             return i, result, None
 
-    def check_draw(self):
+    def _check_draw(self):
+        # Check if all columns are full
         for i in range(self.board_width):
             if self._grid[i][self.board_height - 1] is None:
                 return False
         return True
 
-    def check_win(self, row, column):
+    def _check_win(self, row, column):
         player = self._grid[row][column]
 
         if player is None:
@@ -59,6 +67,7 @@ class Game:
 
         positions = []
 
+        # Horizontal check
         horizontal_left = max(row - self._connect + 1, 0)
         horizontal_right = min(row + self._connect, self.board_width) - 1
 
@@ -66,13 +75,16 @@ class Game:
             if self._grid[i][column] == player:
                 positions.append((i, column))
 
+                # Check if there is connect
                 if len(positions) == self._connect:
                     return MoveResult.VICTORY, positions
             else:
                 positions.clear()
 
+        # Reset positions
         positions.clear()
 
+        # Vertical check
         vertical_up = max(column - self._connect + 1, 0)
         vertical_down = min(column + self._connect, self.board_height) - 1
 
@@ -80,13 +92,16 @@ class Game:
             if self._grid[row][i] == player:
                 positions.append((row, i))
 
+                # Check if there is connect
                 if len(positions) == self._connect:
                     return MoveResult.VICTORY, positions
             else:
                 positions.clear()
 
+        # Reset positions
         positions.clear()
 
+        # Diagonal check
         diagonal_up_left = min(row - horizontal_left, vertical_down - column)
         diagonal_down_right = min(horizontal_right - row, column - vertical_up)
 
@@ -94,13 +109,16 @@ class Game:
             if self._grid[row - diagonal_up_left + i][column + diagonal_up_left - i] == player:
                 positions.append((row - diagonal_up_left + i, column + diagonal_up_left - i))
 
+                # Check if there is connect
                 if len(positions) == self._connect:
                     return MoveResult.VICTORY, positions
             else:
                 positions.clear()
 
+        # Reset positions
         positions.clear()
 
+        # Diagonal check
         diagonal_up_right = min(horizontal_right - row, vertical_down - column)
         diagonal_down_left = min(row - horizontal_left, column - vertical_up)
 
@@ -108,6 +126,7 @@ class Game:
             if self._grid[row + diagonal_up_right - i][column + diagonal_up_right - i] == player:
                 positions.append((row + diagonal_up_right - i, column + diagonal_up_right - i))
 
+                # Check if there is connect
                 if len(positions) == self._connect:
                     return MoveResult.VICTORY, positions
             else:

@@ -2,6 +2,7 @@ from connect4.configure import Configure
 
 
 def main():
+    # Run configuration window
     Configure()
 
 

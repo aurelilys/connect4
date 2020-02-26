@@ -9,6 +9,7 @@ from connect4.display.particle import Particle, Side
 class WinEffect:
 
     def __init__(self, game: Game, canvas: Canvas, victory: Victory):
+        # Initialize WinEffect
         self._game = game
         self._canvas = canvas
         self._victory = victory
@@ -24,6 +25,7 @@ class WinEffect:
         self._shake = len(self._victory.positions) * 100
 
     def run(self):
+        # Check if window is destroyed
         if self._game.state == State.DESTROYED:
             return
 
@@ -36,6 +38,7 @@ class WinEffect:
                 if self._counter % 100 == 0:
                     oval_x, oval_y = self._victory.positions[floor(self._counter / 100)]
 
+                    # Draw token selector
                     self._canvas.create_oval(100 + ((oval_x + 0.2) * (400 / self._game.board_width)),
                                              400 - ((oval_y + 0.2) * (340 / self._game.board_height)),
                                              100 + ((oval_x + 0.8) * (400 / self._game.board_width)),
@@ -45,16 +48,20 @@ class WinEffect:
                 self._x += randint(-self._x - 3, -self._x + 3)
                 self._y += randint(-self._y - 3, -self._y + 3)
 
+                # Move canvas
                 self._canvas.place(x=self._x, y=self._y)
         else:
+            # Run particles
             if self._counter % 2 == 0:
                 self._particles.append(Particle(Side.RIGHT, self._canvas, self._color[randint(0, 6)]))
                 self._particles.append(Particle(Side.LEFT, self._canvas, self._color[randint(0, 6)]))
 
+            # Update all particles
             for particle in self._particles:
                 if not particle.update(self._canvas):
                     self._canvas.delete(particle.value)
                     self._particles.remove(particle)
 
+        # Run in 10 milliseconds
         self._counter += 1
         self._canvas.after(10, self.run)
