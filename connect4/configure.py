@@ -31,9 +31,9 @@ class Configure:
 
         self._canvas = Canvas(self._window, width=300, height=450, background='#ecf0f1')
 
-        Label(self._window, text="Connect4", foreground='#2c3e50', font=("The Bold Font", 15)).place(x=160, y=30,
+        Label(self._window, text="Connect4", foreground='#2c3e50', font=("The Bold Font", 15)).place(x=162, y=30,
                                                                                                      anchor="e")
-        Label(self._window, text="Deluxe", foreground='#6c5ce7', font=("The Bold Font", 15)).place(x=160, y=30,
+        Label(self._window, text="Deluxe", foreground='#6c5ce7', font=("The Bold Font", 15)).place(x=162, y=30,
                                                                                                    anchor="w")
 
         self._connect = Scale(self._window, from_=4, to=10, label="Connect", font=("The Bold Font", 7), length=200,
