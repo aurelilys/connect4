@@ -1,6 +1,6 @@
 # Connect 4 Deluxe
 
-An extensible python connect 4, made for school...
+An extensible python connect 4, made for school.
 
 ## Run
 
