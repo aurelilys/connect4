@@ -51,7 +51,7 @@ class Display:
 
         # Setting up new game
         self._game = game
-        self._game.state = State.PLAYING
+        self._game._reset()
 
     def _draw_token(self, x, y, color):
         value = self._canvas.create_oval(100 + ((x + 0.2) * (400 / self._game.board_width)),
@@ -115,7 +115,7 @@ class Display:
 
         # Run win animation
         if result == MoveResult.VICTORY:
-            self._window.after(0, WinEffect(self._game, self._canvas, victory).run)
+            self._window.after(0, WinEffect(self._game, self._canvas, victory, self._reset).run)
             return
 
         # Draw cursor if game is not finish

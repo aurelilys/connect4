@@ -133,6 +133,11 @@ class Game:
                 positions.clear()
 
         return MoveResult.NONE, None
+    
+    def _reset(self):
+        self.state = State.PLAYING
+        self._grid = [[None for i in range(self.board_height)] for j in range(self.board_width)]
+        self.current = self._players[0]
 
 
 class Victory:
